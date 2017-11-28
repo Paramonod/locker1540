@@ -1,0 +1,8 @@
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\obj\Debug\testapp.BL.csprojResolveAssemblyReference.cache
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\obj\Debug\testapp.BL.Properties.Resources.resources
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\obj\Debug\testapp.BL.csproj.GenerateResource.Cache
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\obj\Debug\testapp.BL.csproj.CoreCompileInputs.cache
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\bin\Debug\testapp.BL.exe
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\bin\Debug\testapp.BL.pdb
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\obj\Debug\testapp.BL.exe
+C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp.BL\obj\Debug\testapp.BL.pdb
