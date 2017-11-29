@@ -20,6 +20,7 @@ namespace testapp.UsersPage
         event EventHandler changeUser;
     }
     public partial class UsersForm : Form, IUsersForm
+
     {
         private IAddUser UserOk;
         private addUserForm addUserForm1;
@@ -28,11 +29,32 @@ namespace testapp.UsersPage
             InitializeComponent();
             AddUserBtn.Click += AddUserBtn_Click;
             ChangeBtn.Click += ChangeBtn_Click;
-            listView1.ColumnClick += ListView1_ColumnClick;
+            //listView1.ColumnClick += ListView1_ColumnClick;
+            listView1.ItemSelectionChanged += ListView1_ColumnClick;
         }
-        private void ListView1_ColumnClick(object sender, ColumnClickEventArgs e)
+
+        private void ListView1_ColumnClick(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (listView1.SelectedItems.Count != 0)
+            {
+                string name = listView1.SelectedItems[0].SubItems[0].Text;
+                string surname = listView1.SelectedItems[0].SubItems[1].Text;
+                string SecName = listView1.SelectedItems[0].SubItems[2].Text;
+                string pos = listView1.SelectedItems[0].SubItems[3].Text;
+                string num = listView1.SelectedItems[0].SubItems[4].Text;
+                NameT.Text = name;
+                SurnT.Text = surname;
+                SecNameT.Text = SecName;
+                PosT.Text = pos;
+                NumT.Text = num;
+            } else
+            {
+                NameT.Text = "";
+                SurnT.Text = "";
+                SecNameT.Text = "";
+                PosT.Text = "";
+                NumT.Text = "";
+            }
         }
         #region allneed
         private void ChangeBtn_Click(object sender, EventArgs e)
@@ -44,6 +66,7 @@ namespace testapp.UsersPage
             string pos = listView1.SelectedItems[0].SubItems[3].Text;
             addUserForm1.init(name,surname,SecName,pos);
             addUserForm1.OK += AddUserForm1_OK1;
+            //addUserForm1.StName.Text;
             addUserForm1.Show();
             listView1.SelectedItems[0].Remove();
             UserOk = addUserForm1;

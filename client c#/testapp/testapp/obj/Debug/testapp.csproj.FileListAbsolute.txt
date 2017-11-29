@@ -11,3 +11,16 @@ C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp\bin\Debug\t
 C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp\obj\Debug\testapp.csprojResolveAssemblyReference.cache
 C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp\obj\Debug\testapp.UsersPage.addUserForm.resources
 C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\testapp\obj\Debug\testapp.UsersPage.UsersForm.resources
+Q:\c#\locker1540\client c#\testapp\testapp\bin\Debug\testapp.exe
+Q:\c#\locker1540\client c#\testapp\testapp\bin\Debug\testapp.pdb
+Q:\c#\locker1540\client c#\testapp\testapp\bin\Debug\testapp.BL.exe
+Q:\c#\locker1540\client c#\testapp\testapp\bin\Debug\testapp.BL.pdb
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.csprojResolveAssemblyReference.cache
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.Form1.resources
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.Properties.Resources.resources
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.UsersPage.addUserForm.resources
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.UsersPage.UsersForm.resources
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.csproj.GenerateResource.Cache
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.csproj.CoreCompileInputs.cache
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.exe
+Q:\c#\locker1540\client c#\testapp\testapp\obj\Debug\testapp.pdb
