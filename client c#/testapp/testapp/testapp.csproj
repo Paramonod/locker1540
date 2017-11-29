@@ -53,6 +53,12 @@
     <Compile Include="LoginPage\Presenter.cs" />
     <Compile Include="AppN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsersPage\addCardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UsersPage\addCardForm.Designer.cs">
+      <DependentUpon>addCardForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UsersPage\addUserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UsersPage\addCardForm.resx">
+      <DependentUpon>addCardForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UsersPage\addUserForm.resx">
       <DependentUpon>addUserForm.cs</DependentUpon>
     </EmbeddedResource>

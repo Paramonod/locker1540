@@ -12,23 +12,23 @@ namespace testapp.UsersPage
     public interface IAddUser
     {
         event EventHandler OK;
+        //event EventHandler Change;
         string name { get; }
         string surname { get; }
         string secName { get; }
         string pos { get; }
-        string num { get; }
+        byte[] num { get; }
+        string numstr { get; }
+        string getCard();
     }
     public partial class addUserForm : Form,IAddUser
     {
         private string name1 = "";
         private string surname1 = "";
         private string SecName1 = "";
+        private byte[] num1;
         private string pos1 = "";
         object ctx;
-        public void con(object ctx1)
-        {
-            ctx = ctx1;
-        }
         public void init(string _name, string _surname, string _SecName, string _pos)
         {
             name1 = _name;
@@ -55,23 +55,40 @@ namespace testapp.UsersPage
 
         private void StOk_Click(object sender, EventArgs e)
         {
-            /*ListViewItem lvi = new ListViewItem(StName.Text);
-            lvi.SubItems.Add(StSur.Text);
-            lvi.SubItems.Add(StSecName.Text);
-            lvi.SubItems.Add(StPos.Text);
-            lvi.SubItems.Add("123450");
-            
-            Close();*/
             OK?.Invoke(this, EventArgs.Empty);
         }
 
         private void StChange_Click(object sender, EventArgs e)
         {
-            MessageService service = new MessageService();
-            StSecName.Text = SecName1;
-            service.ShowMessage("Жду карту");
+            addCardForm addCard = new addCardForm();
+            IAddCard read = addCard;
+            addCard.Show();
+            read.label = "Жду карту...";
+            num1 = read.Card;
+            read.label = numstr;
+        }
+        public string getCard()
+        {
+            addCardForm addCard = new addCardForm();
+            IAddCard read = addCard;
+            addCard.Show();
+            return "q";
+        }
+        public string numstr
+        {
+            get
+            {
+                string res = "";
+                for (int i = 0; i < num.Count(); i++)
+                {
+                    res += num[i].ToString();
+                    res += " ";
+                }
+                return res;
+            }
         }
 
+        #region notneed
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -86,6 +103,7 @@ namespace testapp.UsersPage
         {
 
         }
+        #endregion
         public string name
         {
             get { return StName.Text; }
@@ -102,10 +120,11 @@ namespace testapp.UsersPage
         {
             get { return StPos.Text; }
         }
-        public string num
+        public byte[] num
         {
-            get { return "12345"; }
+            get { return num1; }
         }
         public event EventHandler OK;
+        //public event EventHandler Change;
     }
 }

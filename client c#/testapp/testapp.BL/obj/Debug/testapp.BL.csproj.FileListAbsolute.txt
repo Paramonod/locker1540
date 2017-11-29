@@ -14,3 +14,11 @@ Q:\c#\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.csproj.Genera
 Q:\c#\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.csproj.CoreCompileInputs.cache
 Q:\c#\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.exe
 Q:\c#\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.pdb
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\bin\Debug\testapp.BL.exe
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\bin\Debug\testapp.BL.pdb
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.csprojResolveAssemblyReference.cache
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.Properties.Resources.resources
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.csproj.GenerateResource.Cache
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.csproj.CoreCompileInputs.cache
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.exe
+E:\locker1540\locker1540\client c#\testapp\testapp.BL\obj\Debug\testapp.BL.pdb

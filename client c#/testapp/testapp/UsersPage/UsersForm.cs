@@ -24,6 +24,8 @@ namespace testapp.UsersPage
     {
         private IAddUser UserOk;
         private addUserForm addUserForm1;
+        private string numstr;
+
         public UsersForm()
         {
             InitializeComponent();
@@ -64,21 +66,22 @@ namespace testapp.UsersPage
             string surname = listView1.SelectedItems[0].SubItems[1].Text;
             string SecName = listView1.SelectedItems[0].SubItems[2].Text;
             string pos = listView1.SelectedItems[0].SubItems[3].Text;
-            addUserForm1.init(name,surname,SecName,pos);
+            addUserForm1.init(name, surname, SecName, pos);
             addUserForm1.OK += AddUserForm1_OK1;
+            //addUserForm1.Change += AddUserForm1_Change;
             //addUserForm1.StName.Text;
             addUserForm1.Show();
             listView1.SelectedItems[0].Remove();
             UserOk = addUserForm1;
         }
-        
+
         private void AddUserForm1_OK(object sender, EventArgs e)
         {
             ListViewItem lvi = new ListViewItem(UserOk.name);
             lvi.SubItems.Add(UserOk.surname);
             lvi.SubItems.Add(UserOk.secName);
             lvi.SubItems.Add(UserOk.pos);
-            lvi.SubItems.Add(UserOk.num);
+            lvi.SubItems.Add(UserOk.numstr);
             addUserForm1.Close();
             listView1.Items.Add(lvi);
         }
@@ -93,6 +96,7 @@ namespace testapp.UsersPage
             addUserForm1.init(name, surname, SecName, pos);*/
             UserOk = addUserForm1;
             addUserForm1.OK += AddUserForm1_OK;
+            //addUserForm1.Change += AddUserForm1_Change;
             addUserForm1.Show();
             
         }
@@ -103,7 +107,7 @@ namespace testapp.UsersPage
             lvi.SubItems.Add(UserOk.surname);
             lvi.SubItems.Add(UserOk.secName);
             lvi.SubItems.Add(UserOk.pos);
-            lvi.SubItems.Add(UserOk.num);
+            lvi.SubItems.Add(UserOk.numstr);
             listView1.Items.Add(lvi);
             addUserForm1.Close();
 
