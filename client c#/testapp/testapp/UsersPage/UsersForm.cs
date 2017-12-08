@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using testapp.BL;
 
 namespace testapp.UsersPage
 {
@@ -77,13 +78,22 @@ namespace testapp.UsersPage
 
         private void AddUserForm1_OK(object sender, EventArgs e)
         {
-            ListViewItem lvi = new ListViewItem(UserOk.name);
-            lvi.SubItems.Add(UserOk.surname);
-            lvi.SubItems.Add(UserOk.secName);
-            lvi.SubItems.Add(UserOk.pos);
-            lvi.SubItems.Add(UserOk.numstr);
+            string _name = UserOk.name;
+            string _surname = UserOk.surname;
+            string _secName = UserOk.secName;
+            string _pos = UserOk.pos;
+            string _card = UserOk.numstr;
+            ListViewItem lvi = new ListViewItem(_name);
+            lvi.SubItems.Add(_surname);
+            lvi.SubItems.Add(_secName);
+            lvi.SubItems.Add(_pos);
+            lvi.SubItems.Add(_card);
             addUserForm1.Close();
             listView1.Items.Add(lvi);
+            authTest addC = new authTest();
+            IAuth addCard = addC;
+            addCard.addCard(_card, _name, _surname, _secName, _pos);
+            
         }
 
         private void AddUserBtn_Click(object sender, EventArgs e)

@@ -16,6 +16,7 @@ namespace SocketServer
             IPHostEntry ipHost = Dns.GetHostEntry("localhost");
             IPAddress ipAddr = ipHost.AddressList[0];
             IPEndPoint ipEndPoint = new IPEndPoint(ipAddr, 11000);
+            
 
             // Создаем сокет Tcp/Ip
             Socket sListener = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -30,34 +31,6 @@ namespace SocketServer
                 while (true)
                 {
                     Console.WriteLine("Ожидаем соединение через порт {0}", ipEndPoint);
-                    MySqlConnectionStringBuilder mysqlCSB;
-                    mysqlCSB = new MySqlConnectionStringBuilder();
-                    mysqlCSB.Server = "localhost";
-                    mysqlCSB.Database = "lockerdb";
-                    mysqlCSB.UserID = "reader";
-                    mysqlCSB.Password = "IT108";
-                    MySqlConnection con = new MySqlConnection("server=localhost;user=reader;database=lockerdb;port=3306;password=IT108;");
-                    try
-                    {
-                        Console.WriteLine("Connecting to MySQL...");
-                        con.Open();
-
-                        string sql = "SELECT Name FROM userstable WHERE Surname = 'Paramonov'";
-                        MySqlCommand cmd = new MySqlCommand(sql, con);
-                        MySqlDataReader rdr = cmd.ExecuteReader();
-
-                        while (rdr.Read())
-                        {
-                            Console.WriteLine(rdr[0] + " -- " + rdr[1]);
-                        }
-                        rdr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
-                    con.Close();
-                    Console.WriteLine("Done.");
 
                     // Программа приостанавливается, ожидая входящее соединение
                     Socket handler = sListener.Accept();
@@ -72,19 +45,16 @@ namespace SocketServer
 
                     // Показываем данные на консоли
                     Console.Write("Полученный текст: " + data + "\n\n");
-                    
-
-
-                    // Отправляем ответ клиенту\
-                    string reply;
-                    if (data == "Aparamonod:12345")
+                    string reply = "";
+                    switch (data[0])
                     {
-                        reply = "1";
-                    }
-                    else
-                    {
-                        reply = "0";
-                    }
+                        case 'A':
+                            reply = ServAuth(data);
+                            break;
+                        case 'N':
+                            reply = ServAddNew(data);
+                            break;
+                    }                 
                     Console.Write(reply);
                     byte[] msg = Encoding.UTF8.GetBytes(reply);
                     handler.Send(msg);
@@ -108,13 +78,48 @@ namespace SocketServer
                 Console.ReadLine();
             }
         }
+        public static string ServAddNew(string data)
+        {
+            data = data.Substring(1);
+            string [] q =  data.Split(':');
+            for (int i = 0; i < q.Length; i++)
+            {
+                Console.WriteLine(q[i]);
+            }
+            Authq card = new Authq();
+            IAuthq addcard = card;
+            addcard.addN(q[4], q[0], q[1], q[2], q[3]);
+            return "1";
+        }
+        public static string ServAuth(string data)
+        {
+            Authq _auth = new Authq();
+            IAuthq auth = _auth;
+            string _login = data.Substring(1, data.IndexOf(":") - 1);
+            string _password = data.Substring(data.IndexOf(":") + 1);
+
+
+            // Отправляем ответ клиенту
+            string reply;
+            int req = auth.ConAuth(_login, _password);
+            if (req == 1)
+            {
+                reply = "1";
+            }
+            else
+            {
+                reply = "-1";
+            }
+            return reply;
+        }
         public interface IAuthq
         {
-            bool ConAuth();
+            int ConAuth(string login, string password);
+            bool addN(string card, string name, string surname, string secname, string admission);
         }
         public class Authq : IAuthq
         {
-            public bool ConAuth()
+            public bool addN(string card, string name, string surname, string secname, string admission)
             {
                 MySqlConnectionStringBuilder mysqlCSB;
                 mysqlCSB = new MySqlConnectionStringBuilder();
@@ -128,23 +133,58 @@ namespace SocketServer
                     Console.WriteLine("Connecting to MySQL...");
                     con.Open();
 
-                    string sql = "SELECT Name FROM userstable WHERE Surname = 'Paramonov'";
+                    string sql = "INSERT INTO lockerdb.userstable (Name, Surname, SecName, Admission, Auth)" +
+                        " VALUES ('" + name +
+                        "', '" + surname + "', '" + secname + "', '" + admission + "', '1');";
+                    Console.WriteLine(sql);
+                    MySqlCommand cmd = new MySqlCommand(sql, con);
+                    cmd.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex.ToString());
+                    Console.WriteLine("Неверный логин или пароль");
+                    //needGroup = -1;
+                }
+                con.Close();
+                Console.WriteLine("Done.");
+                return true;
+            }
+            public int ConAuth(string login, string password)
+            {
+                int needGroup = 0;
+                MySqlConnectionStringBuilder mysqlCSB;
+                mysqlCSB = new MySqlConnectionStringBuilder();
+                mysqlCSB.Server = "localhost";
+                mysqlCSB.Database = "lockerdb";
+                mysqlCSB.UserID = "reader";
+                mysqlCSB.Password = "IT108";
+                MySqlConnection con = new MySqlConnection(mysqlCSB.ToString());
+                try
+                {
+                    Console.WriteLine("Connecting to MySQL...");
+                    con.Open();
+
+                    string sql = "SELECT Admission FROM lockerdb.userstable WHERE login = '" + login + "' AND password = '" + password + "'";
+                    Console.WriteLine(sql);
                     MySqlCommand cmd = new MySqlCommand(sql, con);
                     MySqlDataReader rdr = cmd.ExecuteReader();
 
                     while (rdr.Read())
                     {
-                        Console.WriteLine(rdr[0] + " -- " + rdr[1]);
+                        Console.WriteLine(rdr[0]);
+                        needGroup = Int32.Parse(rdr[0].ToString());
                     }
                     rdr.Close();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine("Неверный логин или пароль");
+                    needGroup = -1;
                 }
                 con.Close();
                 Console.WriteLine("Done.");
-                return false;
+                return needGroup;
             }
         }
     }

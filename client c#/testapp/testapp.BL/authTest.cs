@@ -11,17 +11,32 @@ namespace testapp.BL
     public interface IAuth
     {
         bool auth(string login, string passwd);
+        bool addCard(string card, string name, string surname, string secname, string admission);
+        //bool SendMessageFromSocket(int port, string password, string login);
     }
     public class authTest : IAuth
     {
         const int port = 8888;
         const string address = "127.0.0.1";
+        public bool addCard(string card,string name, string surname, string secname, string admission)
+        {
+            SendMessageFromSocket("N", 11000, card, name,surname,secname,admission);
+            return true;
+        }
         public bool auth(string login, string passwd)
         {
             bool q = false;
             try
             {
-                q = SendMessageFromSocket(11000, passwd, login);
+                string ans = SendMessageFromSocket("A",11000, passwd, login);
+                if (ans == "1")
+                {
+                    q = true;
+                }
+                else
+                {
+                    q = false;
+                }
             }
             catch (Exception ex)
             {
@@ -29,8 +44,7 @@ namespace testapp.BL
             }
                 return q;
         }
-
-        static bool SendMessageFromSocket(int port, string password, string login)
+        public static string SendMessageFromSocket(string operation, int port, string password, string login)
         {
             bool need = false;
             // Буфер для входящих данных
@@ -50,7 +64,7 @@ namespace testapp.BL
 
 
             Console.WriteLine("Сокет соединяется с {0} ", sender.RemoteEndPoint.ToString());
-            byte[] msg = Encoding.UTF8.GetBytes("A" + login + ":" + password);
+            byte[] msg = Encoding.UTF8.GetBytes(operation + login + ":" + password);
 
             // Отправляем данные через сокет
             int bytesSent = sender.Send(msg);
@@ -58,21 +72,49 @@ namespace testapp.BL
             // Получаем ответ от сервера
             int bytesRec = sender.Receive(bytes);
 
-            String ans =  Encoding.UTF8.GetString(bytes, 0, bytesRec);
-            if (ans == "1")
-            {
-                need = true;
-            } else
-            {
-                need = false;
-            }
-
+            string ans = Encoding.UTF8.GetString(bytes, 0, bytesRec);
             // Используем рекурсию для неоднократного вызова SendMessageFromSocket()
 
             // Освобождаем сокет
             sender.Shutdown(SocketShutdown.Both);
             sender.Close();
-            return need;
+            return ans;
+        }
+        public static string SendMessageFromSocket(string operation, int port, string card, string name, string surname, string secname, string admission)
+        {
+            bool need = false;
+            // Буфер для входящих данных
+            byte[] bytes = new byte[1024];
+
+            // Соединяемся с удаленным устройством
+
+            // Устанавливаем удаленную точку для сокета
+            IPHostEntry ipHost = Dns.GetHostEntry("localhost");
+            IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint ipEndPoint = new IPEndPoint(ipAddr, port);
+
+            Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            // Соединяем сокет с удаленной точкой
+            sender.Connect(ipEndPoint);
+
+
+            Console.WriteLine("Сокет соединяется с {0} ", sender.RemoteEndPoint.ToString());
+            byte[] msg = Encoding.UTF8.GetBytes(operation + name + ":" + surname + ":" + secname + ":" + admission + ":" + card);
+
+            // Отправляем данные через сокет
+            int bytesSent = sender.Send(msg);
+
+            // Получаем ответ от сервера
+            int bytesRec = sender.Receive(bytes);
+
+            string ans = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+            // Используем рекурсию для неоднократного вызова SendMessageFromSocket()
+
+            // Освобождаем сокет
+            sender.Shutdown(SocketShutdown.Both);
+            sender.Close();
+            return ans;
         }
     }
 }
