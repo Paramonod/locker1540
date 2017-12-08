@@ -3,6 +3,8 @@ using System;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 
 namespace SocketServer
 {
@@ -28,6 +30,34 @@ namespace SocketServer
                 while (true)
                 {
                     Console.WriteLine("Ожидаем соединение через порт {0}", ipEndPoint);
+                    MySqlConnectionStringBuilder mysqlCSB;
+                    mysqlCSB = new MySqlConnectionStringBuilder();
+                    mysqlCSB.Server = "localhost";
+                    mysqlCSB.Database = "lockerdb";
+                    mysqlCSB.UserID = "reader";
+                    mysqlCSB.Password = "IT108";
+                    MySqlConnection con = new MySqlConnection("server=localhost;user=reader;database=lockerdb;port=3306;password=IT108;");
+                    try
+                    {
+                        Console.WriteLine("Connecting to MySQL...");
+                        con.Open();
+
+                        string sql = "SELECT Name FROM userstable WHERE Surname = 'Paramonov'";
+                        MySqlCommand cmd = new MySqlCommand(sql, con);
+                        MySqlDataReader rdr = cmd.ExecuteReader();
+
+                        while (rdr.Read())
+                        {
+                            Console.WriteLine(rdr[0] + " -- " + rdr[1]);
+                        }
+                        rdr.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                    con.Close();
+                    Console.WriteLine("Done.");
 
                     // Программа приостанавливается, ожидая входящее соединение
                     Socket handler = sListener.Accept();
@@ -42,13 +72,16 @@ namespace SocketServer
 
                     // Показываем данные на консоли
                     Console.Write("Полученный текст: " + data + "\n\n");
+                    
+
 
                     // Отправляем ответ клиенту\
                     string reply;
                     if (data == "Aparamonod:12345")
                     {
                         reply = "1";
-                    } else
+                    }
+                    else
                     {
                         reply = "0";
                     }
@@ -73,6 +106,45 @@ namespace SocketServer
             finally
             {
                 Console.ReadLine();
+            }
+        }
+        public interface IAuthq
+        {
+            bool ConAuth();
+        }
+        public class Authq : IAuthq
+        {
+            public bool ConAuth()
+            {
+                MySqlConnectionStringBuilder mysqlCSB;
+                mysqlCSB = new MySqlConnectionStringBuilder();
+                mysqlCSB.Server = "localhost";
+                mysqlCSB.Database = "lockerdb";
+                mysqlCSB.UserID = "reader";
+                mysqlCSB.Password = "IT108";
+                MySqlConnection con = new MySqlConnection(mysqlCSB.ToString());
+                try
+                {
+                    Console.WriteLine("Connecting to MySQL...");
+                    con.Open();
+
+                    string sql = "SELECT Name FROM userstable WHERE Surname = 'Paramonov'";
+                    MySqlCommand cmd = new MySqlCommand(sql, con);
+                    MySqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        Console.WriteLine(rdr[0] + " -- " + rdr[1]);
+                    }
+                    rdr.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                con.Close();
+                Console.WriteLine("Done.");
+                return false;
             }
         }
     }
