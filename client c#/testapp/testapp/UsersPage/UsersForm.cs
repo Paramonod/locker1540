@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Collections;
 using System.Windows.Forms;
 using testapp.BL;
 
@@ -30,6 +31,9 @@ namespace testapp.UsersPage
         public UsersForm()
         {
             InitializeComponent();
+            authTest get = new authTest();
+            IAuth DB = get;
+            get.GetDB();
             AddUserBtn.Click += AddUserBtn_Click;
             ChangeBtn.Click += ChangeBtn_Click;
             //listView1.ColumnClick += ListView1_ColumnClick;

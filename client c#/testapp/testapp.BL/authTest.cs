@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Collections;
 using System.Net;
-using System.Net.Sockets;
 
 namespace testapp.BL
 {
@@ -12,12 +12,18 @@ namespace testapp.BL
     {
         bool auth(string login, string passwd);
         bool addCard(string card, string name, string surname, string secname, string admission);
+        ArrayList GetDB();
         //bool SendMessageFromSocket(int port, string password, string login);
     }
     public class authTest : IAuth
     {
         const int port = 8888;
         const string address = "127.0.0.1";
+        public ArrayList GetDB()
+        {
+            string q =  SendMessageFromSocket("G",11000);
+            return new ArrayList { 1 };
+        }
         public bool addCard(string card,string name, string surname, string secname, string admission)
         {
             SendMessageFromSocket("N", 11000, card, name,surname,secname,admission);
@@ -46,7 +52,6 @@ namespace testapp.BL
         }
         public static string SendMessageFromSocket(string operation, int port, string password, string login)
         {
-            bool need = false;
             // Буфер для входящих данных
             byte[] bytes = new byte[1024];
 
@@ -82,7 +87,6 @@ namespace testapp.BL
         }
         public static string SendMessageFromSocket(string operation, int port, string card, string name, string surname, string secname, string admission)
         {
-            bool need = false;
             // Буфер для входящих данных
             byte[] bytes = new byte[1024];
 
@@ -101,6 +105,41 @@ namespace testapp.BL
 
             Console.WriteLine("Сокет соединяется с {0} ", sender.RemoteEndPoint.ToString());
             byte[] msg = Encoding.UTF8.GetBytes(operation + name + ":" + surname + ":" + secname + ":" + admission + ":" + card);
+
+            // Отправляем данные через сокет
+            int bytesSent = sender.Send(msg);
+
+            // Получаем ответ от сервера
+            int bytesRec = sender.Receive(bytes);
+
+            string ans = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+            // Используем рекурсию для неоднократного вызова SendMessageFromSocket()
+
+            // Освобождаем сокет
+            sender.Shutdown(SocketShutdown.Both);
+            sender.Close();
+            return ans;
+        }
+        public static string SendMessageFromSocket(string message, int port)
+        {
+            // Буфер для входящих данных
+            byte[] bytes = new byte[1024];
+
+            // Соединяемся с удаленным устройством
+
+            // Устанавливаем удаленную точку для сокета
+            IPHostEntry ipHost = Dns.GetHostEntry("localhost");
+            IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint ipEndPoint = new IPEndPoint(ipAddr, port);
+
+            Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            // Соединяем сокет с удаленной точкой
+            sender.Connect(ipEndPoint);
+
+
+            Console.WriteLine("Сокет соединяется с {0} ", sender.RemoteEndPoint.ToString());
+            byte[] msg = Encoding.UTF8.GetBytes(message);
 
             // Отправляем данные через сокет
             int bytesSent = sender.Send(msg);

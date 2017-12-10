@@ -4,12 +4,19 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using MySql.Data;
+using System.Collections.Generic;
+using System.Collections;
 using MySql.Data.MySqlClient;
 
 namespace SocketServer
 {
     class Program
     {
+        const string IPADDRESS = "192.168.1.53";
+        const string DATABASE = "lockerdb";
+        const string TABLE = "userstable";
+        const string USER = "reader1";
+        const string PASSWORD = "IT108";
         static void Main(string[] args)
         {
             // Устанавливаем для сокета локальную конечную точку
@@ -54,6 +61,9 @@ namespace SocketServer
                         case 'N':
                             reply = ServAddNew(data);
                             break;
+                        case 'G':
+                            reply = GetDB().ToString();
+                            break;
                     }                 
                     Console.Write(reply);
                     byte[] msg = Encoding.UTF8.GetBytes(reply);
@@ -77,6 +87,12 @@ namespace SocketServer
             {
                 Console.ReadLine();
             }
+        }
+        public static ArrayList GetDB()
+        {
+            Authq card = new Authq();
+            IAuthq addcard = card;
+            return  addcard.GetA();
         }
         public static string ServAddNew(string data)
         {
@@ -116,17 +132,55 @@ namespace SocketServer
         {
             int ConAuth(string login, string password);
             bool addN(string card, string name, string surname, string secname, string admission);
+            ArrayList GetA();
         }
         public class Authq : IAuthq
         {
+            public ArrayList GetA()
+            {
+                ArrayList q = new ArrayList();
+                MySqlConnectionStringBuilder mysqlCSB;
+                mysqlCSB = new MySqlConnectionStringBuilder();
+                mysqlCSB.Server = IPADDRESS;
+                mysqlCSB.Database = DATABASE;
+                mysqlCSB.UserID = USER;
+                mysqlCSB.Password = PASSWORD;
+                MySqlConnection con = new MySqlConnection(mysqlCSB.ToString());
+                try
+                {
+                    Console.WriteLine("Connecting to MySQL...");
+                    con.Open();
+
+                    string sql = "SELECT Name, Surname, SecName, Admission, card FROM lockerdb.userstable;";
+                    Console.WriteLine(sql);
+                    MySqlCommand cmd = new MySqlCommand(sql, con);
+                    MySqlDataReader rdr = cmd.ExecuteReader();
+                    int i = 0;
+                    while (rdr.Read())
+                    {
+                        Console.WriteLine(rdr[i]);
+                        q.Add(rdr[i].ToString());
+                        i++;
+                    }
+                    rdr.Close();
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                    Console.WriteLine("Невозможно подключиться к БД");
+                }
+                con.Close();
+                Console.WriteLine("Done.");
+                return q;
+            }
             public bool addN(string card, string name, string surname, string secname, string admission)
             {
                 MySqlConnectionStringBuilder mysqlCSB;
                 mysqlCSB = new MySqlConnectionStringBuilder();
-                mysqlCSB.Server = "localhost";
-                mysqlCSB.Database = "lockerdb";
-                mysqlCSB.UserID = "reader";
-                mysqlCSB.Password = "IT108";
+                mysqlCSB.Server = IPADDRESS;
+                mysqlCSB.Database = DATABASE;
+                mysqlCSB.UserID = USER;
+                mysqlCSB.Password = PASSWORD;
                 MySqlConnection con = new MySqlConnection(mysqlCSB.ToString());
                 try
                 {
@@ -155,14 +209,15 @@ namespace SocketServer
                 int needGroup = 0;
                 MySqlConnectionStringBuilder mysqlCSB;
                 mysqlCSB = new MySqlConnectionStringBuilder();
-                mysqlCSB.Server = "localhost";
-                mysqlCSB.Database = "lockerdb";
-                mysqlCSB.UserID = "reader";
-                mysqlCSB.Password = "IT108";
+                mysqlCSB.Server = IPADDRESS;
+                mysqlCSB.Database = DATABASE;
+                mysqlCSB.UserID = USER;
+                mysqlCSB.Password = PASSWORD;
                 MySqlConnection con = new MySqlConnection(mysqlCSB.ToString());
                 try
                 {
                     Console.WriteLine("Connecting to MySQL...");
+                    Console.WriteLine(mysqlCSB.ToString());
                     con.Open();
 
                     string sql = "SELECT Admission FROM lockerdb.userstable WHERE login = '" + login + "' AND password = '" + password + "'";
@@ -179,7 +234,8 @@ namespace SocketServer
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Неверный логин или пароль");
+                    
+                    Console.WriteLine(ex.ToString()); //"Неверный логин или пароль"
                     needGroup = -1;
                 }
                 con.Close();
