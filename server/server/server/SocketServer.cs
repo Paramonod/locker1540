@@ -12,10 +12,10 @@ namespace SocketServer
 {
     class Program
     {
-        const string IPADDRESS = "192.168.1.53";
+        const string IPADDRESS = "78.106.118.23";
         const string DATABASE = "lockerdb";
         const string TABLE = "userstable";
-        const string USER = "reader1";
+        const string USER = "reader";
         const string PASSWORD = "IT108";
         static void Main(string[] args)
         {
@@ -53,6 +53,7 @@ namespace SocketServer
                     // Показываем данные на консоли
                     Console.Write("Полученный текст: " + data + "\n\n");
                     string reply = "";
+                    List<string> DBreply = new List<string>();
                     switch (data[0])
                     {
                         case 'A':
@@ -62,11 +63,25 @@ namespace SocketServer
                             reply = ServAddNew(data);
                             break;
                         case 'G':
-                            reply = GetDB().ToString();
+                            DBreply = GetDB();
+                            for (int i = 0; i < DBreply.Count; i++)
+                            {
+                                Console.WriteLine(DBreply[i]);
+                            }
                             break;
                     }                 
                     Console.Write(reply);
-                    byte[] msg = Encoding.UTF8.GetBytes(reply);
+                    byte[] msg;
+                    if (data[0] == 'G')
+                    {
+                        string q = "";
+                        for (int i = 0; i < DBreply.Count; i++)
+                        {
+                            q += DBreply[i] + ":";
+                        }
+                        msg = Encoding.UTF8.GetBytes(q);
+                    } else
+                    msg = Encoding.UTF8.GetBytes(reply);
                     handler.Send(msg);
 
                     if (data.IndexOf("<TheEnd>") > -1)
@@ -88,7 +103,7 @@ namespace SocketServer
                 Console.ReadLine();
             }
         }
-        public static ArrayList GetDB()
+        public static List<string> GetDB()
         {
             Authq card = new Authq();
             IAuthq addcard = card;
@@ -132,13 +147,13 @@ namespace SocketServer
         {
             int ConAuth(string login, string password);
             bool addN(string card, string name, string surname, string secname, string admission);
-            ArrayList GetA();
+            List<string> GetA();
         }
         public class Authq : IAuthq
         {
-            public ArrayList GetA()
+            public List<string> GetA()
             {
-                ArrayList q = new ArrayList();
+                List<string> q = new List<string>();
                 MySqlConnectionStringBuilder mysqlCSB;
                 mysqlCSB = new MySqlConnectionStringBuilder();
                 mysqlCSB.Server = IPADDRESS;
