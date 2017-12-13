@@ -53,7 +53,7 @@ namespace SocketServer
                     // Показываем данные на консоли
                     Console.Write("Полученный текст: " + data + "\n\n");
                     string reply = "";
-                    List<string> DBreply = new List<string>();
+                    List<List<string>> DBreply = new List<List<string>>();
                     switch (data[0])
                     {
                         case 'A':
@@ -77,7 +77,11 @@ namespace SocketServer
                         string q = "";
                         for (int i = 0; i < DBreply.Count; i++)
                         {
-                            q += DBreply[i] + ":";
+                            for (int j = 0; j < DBreply[i].Count; j++)
+                            {
+                                q += DBreply[i][j] + ":";
+                            }
+                            q += ";";
                         }
                         msg = Encoding.UTF8.GetBytes(q);
                     } else
@@ -103,7 +107,7 @@ namespace SocketServer
                 Console.ReadLine();
             }
         }
-        public static List<string> GetDB()
+        public static List<List<string>> GetDB()
         {
             Authq card = new Authq();
             IAuthq addcard = card;
@@ -147,13 +151,13 @@ namespace SocketServer
         {
             int ConAuth(string login, string password);
             bool addN(string card, string name, string surname, string secname, string admission);
-            List<string> GetA();
+            List<List<string>> GetA();
         }
         public class Authq : IAuthq
         {
-            public List<string> GetA()
+            public List<List<string>> GetA()
             {
-                List<string> q = new List<string>();
+                List<List<string>> q = new List<List<string>>();
                 MySqlConnectionStringBuilder mysqlCSB;
                 mysqlCSB = new MySqlConnectionStringBuilder();
                 mysqlCSB.Server = IPADDRESS;
@@ -173,8 +177,11 @@ namespace SocketServer
                     int i = 0;
                     while (rdr.Read())
                     {
-                        Console.WriteLine(rdr[i]);
-                        q.Add(rdr[i].ToString());
+                        Console.WriteLine(rdr[0].ToString() + " " + rdr[1].ToString() + " " + rdr[2].ToString() + " "
+                            + rdr[3].ToString() + " " + rdr[4].ToString() + " ");
+                        List<string> tmp = new List<string> { rdr[0].ToString(), rdr[1].ToString(),
+                            rdr[2].ToString(), rdr[3].ToString(), rdr[4].ToString() };
+                        q.Add(tmp);
                         i++;
                     }
                     rdr.Close();

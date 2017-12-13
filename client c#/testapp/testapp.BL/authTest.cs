@@ -12,17 +12,32 @@ namespace testapp.BL
     {
         bool auth(string login, string passwd);
         bool addCard(string card, string name, string surname, string secname, string admission);
-        ArrayList GetDB();
+        List<List<string>> GetDB();
         //bool SendMessageFromSocket(int port, string password, string login);
     }
     public class authTest : IAuth
     {
         const int port = 8888;
         const string address = "127.0.0.1";
-        public ArrayList GetDB()
+        public List<List<string>> GetDB()
         {
             string q =  SendMessageFromSocket("G",11000);
-            return new ArrayList { 1 };
+            List<List<string>> res = new List<List<string>>();
+            string[] tmp = q.Split(';');
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                Console.Write(i + " ");
+                List<string> tmp1 = new List<string>();
+                string[] tmp2 = tmp[i].Split(':');
+                for (int j = 0; j < tmp2.Length; j++)
+                {
+                    tmp1.Add(tmp2[j]);
+                    Console.Write(tmp2[j] + " ");
+                }
+                res.Add(tmp1);
+                Console.WriteLine();
+            }
+            return res;
         }
         public bool addCard(string card,string name, string surname, string secname, string admission)
         {

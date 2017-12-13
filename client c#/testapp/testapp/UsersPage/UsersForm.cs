@@ -33,7 +33,7 @@ namespace testapp.UsersPage
             InitializeComponent();
             authTest get = new authTest();
             IAuth DB = get;
-            get.GetDB();
+            List<List<string>> allusers =  get.GetDB();
             AddUserBtn.Click += AddUserBtn_Click;
             ChangeBtn.Click += ChangeBtn_Click;
             //listView1.ColumnClick += ListView1_ColumnClick;
