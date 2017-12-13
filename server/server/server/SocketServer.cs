@@ -56,6 +56,9 @@ namespace SocketServer
                     List<List<string>> DBreply = new List<List<string>>();
                     switch (data[0])
                     {
+                        case 'C':
+                            reply = "1";
+                            break;
                         case 'A':
                             reply = ServAuth(data);
                             break;
@@ -151,6 +154,7 @@ namespace SocketServer
         {
             int ConAuth(string login, string password);
             bool addN(string card, string name, string surname, string secname, string admission);
+            bool changeC(string id, string card, string name, string surname, string secname, string admission);
             List<List<string>> GetA();
         }
         public class Authq : IAuthq
@@ -212,6 +216,36 @@ namespace SocketServer
                     string sql = "INSERT INTO lockerdb.userstable (Name, Surname, SecName, Admission, Auth)" +
                         " VALUES ('" + name +
                         "', '" + surname + "', '" + secname + "', '" + admission + "', '1');";
+                    Console.WriteLine(sql);
+                    MySqlCommand cmd = new MySqlCommand(sql, con);
+                    cmd.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex.ToString());
+                    Console.WriteLine("Неверный логин или пароль");
+                    //needGroup = -1;
+                }
+                con.Close();
+                Console.WriteLine("Done.");
+                return true;
+            }
+            public bool changeC(string id,string card, string name, string surname, string secname, string admission)
+            {
+                MySqlConnectionStringBuilder mysqlCSB;
+                mysqlCSB = new MySqlConnectionStringBuilder();
+                mysqlCSB.Server = IPADDRESS;
+                mysqlCSB.Database = DATABASE;
+                mysqlCSB.UserID = USER;
+                mysqlCSB.Password = PASSWORD;
+                MySqlConnection con = new MySqlConnection(mysqlCSB.ToString());
+                try
+                {
+                    Console.WriteLine("Connecting to MySQL...");
+                    con.Open();
+
+                    string sql = "UPDATE lockerdb.userstable SET Name='" + name +
+                        "', Surname='" + surname + "', SecName ='" + secname + "', Admission='" + admission + "' WHERE id='"+id+"';";
                     Console.WriteLine(sql);
                     MySqlCommand cmd = new MySqlCommand(sql, con);
                     cmd.ExecuteReader();

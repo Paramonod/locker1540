@@ -12,6 +12,7 @@ namespace testapp.BL
     {
         bool auth(string login, string passwd);
         bool addCard(string card, string name, string surname, string secname, string admission);
+        bool changeCard(string id, string card, string name, string surname, string secname, string admission);
         List<List<string>> GetDB();
         //bool SendMessageFromSocket(int port, string password, string login);
     }
@@ -42,6 +43,11 @@ namespace testapp.BL
         public bool addCard(string card,string name, string surname, string secname, string admission)
         {
             SendMessageFromSocket("N", 11000, card, name,surname,secname,admission);
+            return true;
+        }
+        public bool changeCard(string id, string card, string name, string surname, string secname, string admission)
+        {
+            SendMessageFromSocket("C",id, 11000, card, name, surname, secname, admission);
             return true;
         }
         public bool auth(string login, string passwd)
@@ -85,6 +91,41 @@ namespace testapp.BL
 
             Console.WriteLine("Сокет соединяется с {0} ", sender.RemoteEndPoint.ToString());
             byte[] msg = Encoding.UTF8.GetBytes(operation + login + ":" + password);
+
+            // Отправляем данные через сокет
+            int bytesSent = sender.Send(msg);
+
+            // Получаем ответ от сервера
+            int bytesRec = sender.Receive(bytes);
+
+            string ans = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+            // Используем рекурсию для неоднократного вызова SendMessageFromSocket()
+
+            // Освобождаем сокет
+            sender.Shutdown(SocketShutdown.Both);
+            sender.Close();
+            return ans;
+        }
+        public static string SendMessageFromSocket(string operation,string id, int port, string card, string name, string surname, string secname, string admission)
+        {
+            // Буфер для входящих данных
+            byte[] bytes = new byte[1024];
+
+            // Соединяемся с удаленным устройством
+
+            // Устанавливаем удаленную точку для сокета
+            IPHostEntry ipHost = Dns.GetHostEntry("localhost");
+            IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint ipEndPoint = new IPEndPoint(ipAddr, port);
+
+            Socket sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            // Соединяем сокет с удаленной точкой
+            sender.Connect(ipEndPoint);
+
+
+            Console.WriteLine("Сокет соединяется с {0} ", sender.RemoteEndPoint.ToString());
+            byte[] msg = Encoding.UTF8.GetBytes(operation + id + ":" + name + ":" + surname + ":" + secname + ":" + admission + ":" + card);
 
             // Отправляем данные через сокет
             int bytesSent = sender.Send(msg);

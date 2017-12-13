@@ -34,6 +34,15 @@ namespace testapp.UsersPage
             authTest get = new authTest();
             IAuth DB = get;
             List<List<string>> allusers =  get.GetDB();
+            for (int i = 0; i < allusers.Count; i++)
+            {
+                ListViewItem lvi = new ListViewItem(allusers[i][0]);
+                for (int j = 1; j < allusers[i].Count; j++)
+                {
+                    lvi.SubItems.Add(allusers[i][j]);
+                }
+                listView1.Items.Add(lvi);
+            }
             AddUserBtn.Click += AddUserBtn_Click;
             ChangeBtn.Click += ChangeBtn_Click;
             //listView1.ColumnClick += ListView1_ColumnClick;
@@ -49,11 +58,13 @@ namespace testapp.UsersPage
                 string SecName = listView1.SelectedItems[0].SubItems[2].Text;
                 string pos = listView1.SelectedItems[0].SubItems[3].Text;
                 string num = listView1.SelectedItems[0].SubItems[4].Text;
+                string id = listView1.SelectedItems[0].SubItems[5].Text;
                 NameT.Text = name;
                 SurnT.Text = surname;
                 SecNameT.Text = SecName;
                 PosT.Text = pos;
                 NumT.Text = num;
+                idT.Text = id;
             } else
             {
                 NameT.Text = "";
@@ -61,6 +72,7 @@ namespace testapp.UsersPage
                 SecNameT.Text = "";
                 PosT.Text = "";
                 NumT.Text = "";
+                idT.Text = "";
             }
         }
         #region allneed
@@ -71,13 +83,13 @@ namespace testapp.UsersPage
             string surname = listView1.SelectedItems[0].SubItems[1].Text;
             string SecName = listView1.SelectedItems[0].SubItems[2].Text;
             string pos = listView1.SelectedItems[0].SubItems[3].Text;
-            addUserForm1.init(name, surname, SecName, pos);
+            string id = listView1.SelectedItems[0].SubItems[4].Text;
+            addUserForm1.init(name, surname, SecName, pos, id);
             addUserForm1.OK += AddUserForm1_OK1;
             //addUserForm1.Change += AddUserForm1_Change;
             //addUserForm1.StName.Text;
             addUserForm1.Show();
-            listView1.SelectedItems[0].Remove();
-            UserOk = addUserForm1;
+           
         }
 
         private void AddUserForm1_OK(object sender, EventArgs e)
@@ -97,7 +109,20 @@ namespace testapp.UsersPage
             authTest addC = new authTest();
             IAuth addCard = addC;
             addCard.addCard(_card, _name, _surname, _secName, _pos);
-            
+            listView1.Clear();
+            authTest get = new authTest();
+            IAuth DB = get;
+            List<List<string>> allusers = get.GetDB();
+            for (int i = 0; i < allusers.Count; i++)
+            {
+                ListViewItem lvi1 = new ListViewItem(allusers[i][0]);
+                for (int j = 1; j < allusers[i].Count; j++)
+                {
+                    lvi1.SubItems.Add(allusers[i][j]);
+                }
+                listView1.Items.Add(lvi1);
+            }
+
         }
 
         private void AddUserBtn_Click(object sender, EventArgs e)
@@ -117,12 +142,30 @@ namespace testapp.UsersPage
 
         private void AddUserForm1_OK1(object sender, EventArgs e)
         {
-            ListViewItem lvi = new ListViewItem(UserOk.name);
-            lvi.SubItems.Add(UserOk.surname);
-            lvi.SubItems.Add(UserOk.secName);
-            lvi.SubItems.Add(UserOk.pos);
-            lvi.SubItems.Add(UserOk.numstr);
-            listView1.Items.Add(lvi);
+            string _name = UserOk.name;
+            string _surname = UserOk.surname;
+            string _secName = UserOk.secName;
+            string _pos = UserOk.pos;
+            string _card = UserOk.numstr;
+            string _id = UserOk.id;
+            addUserForm1.Close();
+            authTest addC = new authTest();
+            IAuth addCard = addC;
+            addCard.changeCard(_id,_card, _name, _surname, _secName, _pos);
+            UserOk = addUserForm1;
+            listView1.Clear();
+            authTest get = new authTest();
+            IAuth DB = get;
+            List<List<string>> allusers = get.GetDB();
+            for (int i = 0; i < allusers.Count; i++)
+            {
+                ListViewItem lvi1 = new ListViewItem(allusers[i][0]);
+                for (int j = 1; j < allusers[i].Count; j++)
+                {
+                    lvi1.SubItems.Add(allusers[i][j]);
+                }
+                listView1.Items.Add(lvi1);
+            }
             addUserForm1.Close();
 
         }
@@ -182,6 +225,11 @@ namespace testapp.UsersPage
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
         {
 
         }

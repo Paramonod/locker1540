@@ -19,6 +19,7 @@ namespace testapp.UsersPage
         string pos { get; }
         byte[] num { get; }
         string numstr { get; }
+        string id { get; }
         string getCard();
     }
     public partial class addUserForm : Form,IAddUser
@@ -28,17 +29,29 @@ namespace testapp.UsersPage
         private string SecName1 = "";
         private byte[] num1;
         private string pos1 = "";
+        private string id1 = "";
         object ctx;
-        public void init(string _name, string _surname, string _SecName, string _pos)
+        public void init(string _name, string _surname, string _SecName, string _pos, string _id)
         {
             name1 = _name;
             surname1 = _surname;
             SecName1 = _SecName;
             pos1 = _pos;
+            id1 = _id;
             StName.Text = name1;
             StSur.Text = surname1;
             StSecName.Text = SecName1;
             StPos.Text = pos1;
+            StChange.Click += StChange_Click;
+            StOk.Click += StOk_Click;
+        }
+        public void init(string _id)
+        {
+            StName.Text = name1;
+            StSur.Text = surname1;
+            StSecName.Text = SecName1;
+            StPos.Text = pos1;
+            id1 = _id;
             StChange.Click += StChange_Click;
             StOk.Click += StOk_Click;
         }
@@ -119,6 +132,10 @@ namespace testapp.UsersPage
         public string pos
         {
             get { return StPos.Text; }
+        }
+        public string id
+        {
+            get { return id1; }
         }
         public byte[] num
         {
