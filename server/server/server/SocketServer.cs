@@ -174,7 +174,7 @@ namespace SocketServer
                     Console.WriteLine("Connecting to MySQL...");
                     con.Open();
 
-                    string sql = "SELECT Name, Surname, SecName, Admission, card FROM lockerdb.userstable;";
+                    string sql = "SELECT Name, Surname, SecName, Admission, card,id FROM lockerdb.userstable;";
                     Console.WriteLine(sql);
                     MySqlCommand cmd = new MySqlCommand(sql, con);
                     MySqlDataReader rdr = cmd.ExecuteReader();
@@ -182,9 +182,9 @@ namespace SocketServer
                     while (rdr.Read())
                     {
                         Console.WriteLine(rdr[0].ToString() + " " + rdr[1].ToString() + " " + rdr[2].ToString() + " "
-                            + rdr[3].ToString() + " " + rdr[4].ToString() + " ");
+                            + rdr[3].ToString() + " " + rdr[4].ToString() + " " + rdr[5].ToString());
                         List<string> tmp = new List<string> { rdr[0].ToString(), rdr[1].ToString(),
-                            rdr[2].ToString(), rdr[3].ToString(), rdr[4].ToString() };
+                            rdr[2].ToString(), rdr[3].ToString(), rdr[4].ToString(), rdr[5].ToString()};
                         q.Add(tmp);
                         i++;
                     }
@@ -213,9 +213,9 @@ namespace SocketServer
                     Console.WriteLine("Connecting to MySQL...");
                     con.Open();
 
-                    string sql = "INSERT INTO lockerdb.userstable (Name, Surname, SecName, Admission, Auth)" +
+                    string sql = "INSERT INTO lockerdb.userstable (Name, Surname, SecName, Admission, card,Auth)" +
                         " VALUES ('" + name +
-                        "', '" + surname + "', '" + secname + "', '" + admission + "', '1');";
+                        "', '" + surname + "', '" + secname + "', '" + admission + "', '" + card +"', '1');";
                     Console.WriteLine(sql);
                     MySqlCommand cmd = new MySqlCommand(sql, con);
                     cmd.ExecuteReader();

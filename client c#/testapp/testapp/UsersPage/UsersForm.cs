@@ -99,28 +99,22 @@ namespace testapp.UsersPage
             string _secName = UserOk.secName;
             string _pos = UserOk.pos;
             string _card = UserOk.numstr;
-            ListViewItem lvi = new ListViewItem(_name);
-            lvi.SubItems.Add(_surname);
-            lvi.SubItems.Add(_secName);
-            lvi.SubItems.Add(_pos);
-            lvi.SubItems.Add(_card);
             addUserForm1.Close();
-            listView1.Items.Add(lvi);
             authTest addC = new authTest();
             IAuth addCard = addC;
             addCard.addCard(_card, _name, _surname, _secName, _pos);
-            listView1.Clear();
+            listView1.Items.Clear();
             authTest get = new authTest();
             IAuth DB = get;
             List<List<string>> allusers = get.GetDB();
-            for (int i = 0; i < allusers.Count; i++)
+            for (int i = 0; i < allusers.Count-1; i++)
             {
-                ListViewItem lvi1 = new ListViewItem(allusers[i][0]);
+                ListViewItem lvi = new ListViewItem(allusers[i][0]);
                 for (int j = 1; j < allusers[i].Count; j++)
                 {
-                    lvi1.SubItems.Add(allusers[i][j]);
+                    lvi.SubItems.Add(allusers[i][j]);
                 }
-                listView1.Items.Add(lvi1);
+                listView1.Items.Add(lvi);
             }
 
         }
