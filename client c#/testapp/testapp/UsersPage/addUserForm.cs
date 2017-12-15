@@ -17,7 +17,7 @@ namespace testapp.UsersPage
         string surname { get; }
         string secName { get; }
         string pos { get; }
-        byte[] num { get; }
+        string[] num { get; }
         string numstr { get; }
         string id { get; }
         string getCard();
@@ -27,17 +27,20 @@ namespace testapp.UsersPage
         private string name1 = "";
         private string surname1 = "";
         private string SecName1 = "";
-        private byte[] num1;
+        private string[] num1;
+        bool change = false;
         private string pos1 = "";
         private string id1 = "";
         object ctx;
-        public void init(string _name, string _surname, string _SecName, string _pos, string _id)
+        public void init(string _name, string _surname, string _SecName, string _pos, string _id, string _card)
         {
             name1 = _name;
             surname1 = _surname;
             SecName1 = _SecName;
             pos1 = _pos;
             id1 = _id;
+            String[] f = _card.Split(' ');
+            num1 = f;
             StName.Text = name1;
             StSur.Text = surname1;
             StSecName.Text = SecName1;
@@ -75,10 +78,20 @@ namespace testapp.UsersPage
         {
             addCardForm addCard = new addCardForm();
             IAddCard read = addCard;
-            addCard.Show();
-            read.label = "Жду карту...";
-            num1 = read.Card;
-            read.label = numstr;
+            if (!change)
+            {
+                addCard.Show();
+                read.label = "Жду карту...";
+                byte[] tmp = read.Card;
+                string[] tmp1 = new string[tmp.Length];
+                for (int i = 0; i < tmp.Length; i++)
+                {
+                    tmp1[i] = tmp[i].ToString();
+                }
+                num1 = tmp1;
+                read.label = numstr;
+                change = true;
+            }
         }
         public string getCard()
         {
@@ -94,7 +107,7 @@ namespace testapp.UsersPage
                 string res = "";
                 for (int i = 0; i < num.Count(); i++)
                 {
-                    res += num[i].ToString();
+                    res += num[i];
                     res += " ";
                 }
                 return res;
@@ -137,7 +150,7 @@ namespace testapp.UsersPage
         {
             get { return id1; }
         }
-        public byte[] num
+        public string[] num
         {
             get { return num1; }
         }

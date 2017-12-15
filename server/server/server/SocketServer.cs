@@ -58,12 +58,14 @@ namespace SocketServer
                     {
                         case 'C':
                             reply = "1";
+                            ServChange(data);
                             break;
                         case 'A':
                             reply = ServAuth(data);
                             break;
                         case 'N':
-                            reply = ServAddNew(data);
+                            reply = "1";
+                            ServAddNew(data);
                             break;
                         case 'G':
                             DBreply = GetDB();
@@ -116,7 +118,7 @@ namespace SocketServer
             IAuthq addcard = card;
             return  addcard.GetA();
         }
-        public static string ServAddNew(string data)
+        public static void ServAddNew(string data)
         {
             data = data.Substring(1);
             string [] q =  data.Split(':');
@@ -127,7 +129,6 @@ namespace SocketServer
             Authq card = new Authq();
             IAuthq addcard = card;
             addcard.addN(q[4], q[0], q[1], q[2], q[3]);
-            return "1";
         }
         public static string ServAuth(string data)
         {
@@ -149,6 +150,18 @@ namespace SocketServer
                 reply = "-1";
             }
             return reply;
+        }
+        public static void ServChange(string data)
+        {
+            data = data.Substring(1);
+            string[] q = data.Split(':');
+            for (int i = 0; i < q.Length; i++)
+            {
+                Console.WriteLine(q[i]);
+            }
+            Authq card = new Authq();
+            IAuthq addcard = card;
+            addcard.changeC(q[0],q[5],q[1],q[2],q[3],q[4]);
         }
         public interface IAuthq
         {
@@ -245,7 +258,8 @@ namespace SocketServer
                     con.Open();
 
                     string sql = "UPDATE lockerdb.userstable SET Name='" + name +
-                        "', Surname='" + surname + "', SecName ='" + secname + "', Admission='" + admission + "' WHERE id='"+id+"';";
+                        "', Surname='" + surname + "', SecName ='" + secname + "', Admission='" + admission + "',card='" + card
+                        +"' WHERE id='"+id+"';";
                     Console.WriteLine(sql);
                     MySqlCommand cmd = new MySqlCommand(sql, con);
                     cmd.ExecuteReader();

@@ -83,8 +83,10 @@ namespace testapp.UsersPage
             string surname = listView1.SelectedItems[0].SubItems[1].Text;
             string SecName = listView1.SelectedItems[0].SubItems[2].Text;
             string pos = listView1.SelectedItems[0].SubItems[3].Text;
-            string id = listView1.SelectedItems[0].SubItems[4].Text;
-            addUserForm1.init(name, surname, SecName, pos, id);
+            string id = listView1.SelectedItems[0].SubItems[5].Text;
+            string card = listView1.SelectedItems[0].SubItems[4].Text;
+            UserOk = addUserForm1;
+            addUserForm1.init(name, surname, SecName, pos, id,card);
             addUserForm1.OK += AddUserForm1_OK1;
             //addUserForm1.Change += AddUserForm1_Change;
             //addUserForm1.StName.Text;
@@ -145,9 +147,10 @@ namespace testapp.UsersPage
             addUserForm1.Close();
             authTest addC = new authTest();
             IAuth addCard = addC;
+            if (_name != "")
             addCard.changeCard(_id,_card, _name, _surname, _secName, _pos);
             UserOk = addUserForm1;
-            listView1.Clear();
+            listView1.Items.Clear();
             authTest get = new authTest();
             IAuth DB = get;
             List<List<string>> allusers = get.GetDB();
