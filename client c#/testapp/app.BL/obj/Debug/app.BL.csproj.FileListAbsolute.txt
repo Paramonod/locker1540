@@ -1,4 +1,0 @@
-C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\app.BL\obj\Debug\app.BL.csprojResolveAssemblyReference.cache
-C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\app.BL\obj\Debug\app.BL.Properties.Resources.resources
-C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\app.BL\obj\Debug\app.BL.csproj.GenerateResource.Cache
-C:\Users\gamiy\Documents\Visual Studio 2017\Projects\testapp\app.BL\obj\Debug\app.BL.csproj.CoreCompileInputs.cache
